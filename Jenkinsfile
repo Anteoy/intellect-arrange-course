@@ -26,7 +26,7 @@ pipeline {
                 sh "mvn -v"
                 sh "mvn package"
                 sh "apt-get update"
-                sh "apt-get install docker-engine"
+                sh "apt-get install docker-engine -y"
                 sh "docker build -t registry-vpc.cn-shanghai.aliyuncs.com/online_biz/service-intellect-arrange-excel:$DOCKER_TAG ."
                 sh "docker login -u $DOCKER_USER -p $DOCKER_PASS registry-vpc.cn-shanghai.aliyuncs.com"
                 sh "docker push registry-vpc.cn-shanghai.aliyuncs.com/online_biz/service-intellect-arrange-excel:$DOCKER_TAG"
