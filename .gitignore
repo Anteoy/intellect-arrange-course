@@ -1,3 +1,5 @@
 src/main/test/star/
 *.iml
 .idea/
+target/
+*.log
