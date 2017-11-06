@@ -13,7 +13,7 @@ String getDockerTag() {
 }
 pipeline {
     agent {
-        #docker "hub.c.163.com/library/maven:3-jdk-8-alpine"
+        //docker "hub.c.163.com/library/maven:3-jdk-8-alpine"
          docker "maven/3.5.2-jdk-8-alpine"
     }
     stages {
