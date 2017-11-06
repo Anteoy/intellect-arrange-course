@@ -13,8 +13,7 @@ String getDockerTag() {
 }
 pipeline {
     agent {
-        //docker "hub.c.163.com/library/maven:3-jdk-8-alpine"
-         docker "maven:3.5.2-jdk-8-alpine"
+        docker "anteoy/ubuntu-docker-maven-java:0.1.0"
     }
     stages {
         stage('build') {
@@ -25,8 +24,6 @@ pipeline {
                 sh "ls"
                 sh "mvn -v"
                 sh "mvn package"
-                sh "apt-get update"
-                sh "apt-get install docker-engine -y"
                 sh "docker build -t registry-vpc.cn-shanghai.aliyuncs.com/online_biz/service-intellect-arrange-excel:$DOCKER_TAG ."
                 sh "docker login -u $DOCKER_USER -p $DOCKER_PASS registry-vpc.cn-shanghai.aliyuncs.com"
                 sh "docker push registry-vpc.cn-shanghai.aliyuncs.com/online_biz/service-intellect-arrange-excel:$DOCKER_TAG"
