@@ -3,3 +3,6 @@ src/main/test/star/
 .idea/
 target/
 *.log
+.mvn
+mvnw
+mvnw.cmd

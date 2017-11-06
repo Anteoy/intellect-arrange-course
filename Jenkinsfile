@@ -22,6 +22,8 @@ pipeline {
             }
             steps {
                 sh "ls"
+                sh "mvn -v"
+                sh " mvn -N io.takari:maven:wrapper"
                 sh "./mvnw package"
                 sh "docker build -t registry-vpc.cn-shanghai.aliyuncs.com/online_biz/service-intellect-arrange-excel:$DOCKER_TAG ."
                 sh "docker login -u $DOCKER_USER -p $DOCKER_PASS registry-vpc.cn-shanghai.aliyuncs.com"
