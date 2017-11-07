@@ -1,0 +1,514 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.class100.service.usercenter";
+option java_outer_classname = "UserCenterProto";
+
+package custom_proto;
+
+// The greeting service definition.
+service ConsumerCentre {
+  // 统一认证登录
+  rpc AuthStudent (RequestAuthStruct) returns (ReplyAuthStudent) {}
+  rpc AuthTeacher (RequestAuthStruct) returns (ReplyAuthTeacher) {}
+  rpc AuthTeachingAssistant (RequestAuthStruct) returns (ReplyAuthTeachingAssistant) {}
+  rpc AuthSchool (RequestAuthStruct) returns (ReplyAuthSchool) {}
+  //统一注册
+  rpc RegisterStudent (RequestRStudentStruct) returns (ReplyRStruct) {}
+  rpc RegisterTeacher (RequestRTeacherStruct) returns (ReplyRStruct) {}
+  rpc RegisterTeachingAssistant (RequestRTeachingAssistantStruct) returns (ReplyRStruct) {}
+  rpc RegisterSchool (RequestRSchoolStruct) returns (ReplyRStruct) {}
+  //统一更新
+  rpc UpdateStudent (RequestRStudentStruct) returns (ReplyRStruct) {}
+  rpc UpdateTeacher (RequestRTeacherStruct) returns (ReplyRStruct) {}
+  rpc UpdateTeachingAssistant (RequestRTeachingAssistantStruct) returns (ReplyRStruct) {}
+  rpc UpdateSchool (RequestRSchoolStruct) returns (ReplyRStruct) {}
+  //获取所有
+  rpc GetStudents (RequestGetStus) returns (CascadeStuGRPCs) {}
+  rpc GetTeachers (RequestGetTeas) returns (ReplyTeachers) {}
+  rpc GetTeachingAssistants (RequestGetTeaassis) returns (ReplyTeachingAssistants) {}
+  rpc GetSchools (RequestGetSchs) returns (ReplySchools) {}
+  // 根据学校id和年级id获取所有班级
+  rpc GetClasses (RequestGetClassesStruct) returns (ReplyGetClassesStruct) {}
+  //app 根据学生id获取级联学生信息
+  rpc GetStudentInfoById(Request_studentinfo_app) returns (RequestRStudentStruct) {}
+  //根据登录名查询学生信息
+  rpc GetStudentByLoginName(ReqGetStudentByLoginName) returns (RequestRStudentStruct) {}
+  //app 查询我的同学
+  rpc GetMySchoolmate(Request_MySchoolmate_app) returns (Reply_MySchoolmate_app) {}
+  //根据班级id获取所有学生
+  rpc GetStudentsByClassID(RequestClassID) returns (ReplyGetStudents) {}
+  //根据学生姓名获取所有此姓名学生
+  rpc GetStudentsByScreen(RequestStudentScreen) returns (ReplyGetStudents) {}
+  //根据老师ID查询老师
+  rpc GetTeacherInfoById(GetTeacherInfoByIdRequest) returns (ReplyAuthTeacher) {}
+
+  //获取所有加速线路
+  rpc GetAccelerates(ReqGetAccelerates) returns (RepGetAccelerates) {}
+  rpc CreateAccelerate(Accelerates) returns (ReplyRStruct) {}
+  rpc UpdateAccelerate(Accelerates) returns (ReplyRStruct) {}
+
+  //wechat 
+  //塞选学校
+  rpc FindAllSchoolByOregionType(RequestSchoolWechat) returns (ResponseSchoolsByRegionType) {}
+  //cms 省市区学校
+  rpc FindAllSchoolByOregion(RequestSchoolCMS) returns (ResponseSchoolsByRegionType) {}
+  //通过手机号判断当前用户是否存在
+  rpc IsExistStuByPhone(RequestPhone) returns (ResponseExistedByPhoneStu) {}
+  //新用户增加密码
+  rpc UpdateStudentByPhone (RequestRStudentStruct) returns (ReplyRStruct) {}
+
+  //app add
+  //学校类型 获取省
+  rpc GetSchoolProvince (ReqGetSchoolProvince) returns (RepGetSchoolProvince) {}
+  //学校类型 省 获取市
+  rpc GetCityByProvince (ReqGetCityByProvince) returns (RepGetCityByProvince) {}
+  //学校类型 省 市 获取区
+  rpc GetRegionByTypeAndProvinceCity (ReqGetRegionByTypeAndProvinceCity) returns (RepGetRegionByTypeAndProvinceCity) {}
+  //根据id获取学校的详细信息
+  rpc GetSchInfoByID (ReqGetSchInfoByID) returns (RequestRSchoolStruct) {}
+  //获取所有教材版本
+  rpc GetTextbooksVersion (ReqGetTextbooksVersion) returns (RepGetTextbooksVersion) {}
+  //根据id列表获取所有学生详细信息
+  rpc GetStudentsByUIDs(RequestUIDs) returns (ReplyGetStudents) {}
+  //根据学校和年级id获取的学生id列表
+  rpc GetStudentIDsBySchoolGrade (RequestGetStudentIDsBySchoolGrade) returns (ReplyGetStudentIDsBySchoolGrade) {}
+  //根据学生id列表获取这些学生属于的学校列表
+  rpc GetSchoolsByUIDs (RequestUIDs) returns (ReplySchools) {}
+
+
+  //extra
+  rpc GetClassInfoById (ReqGetClassInfoById) returns (RepGetClassInfoById) {}
+  //根据学校名等获取班级信息
+  rpc GetClassBySchoolD(ReqGetClassBySchoolD) returns (RepGetClassBySchoolD) {}
+  //根据外教nickname获取外教信息
+  rpc GetforeignerByNickName(ReqGetforeignerByNickName) returns (RepGetforeignerByNickName) {}
+}
+
+message ReqGetforeignerByNickName {
+    string NickName = 1;
+}
+
+message RepGetforeignerByNickName {
+    RequestRTeacherStruct teacher = 1;
+}
+
+message RepCreateAccelerate {
+}
+
+message RepGetAccelerates {
+    string message = 1;
+    string code = 2;
+    repeated Accelerates sls = 3;
+    int64 total = 4;
+}
+message ReqGetAccelerates {
+    int64 pageSize = 1;
+    int64 currentPage = 2;
+}
+message Accelerates {
+    int64 id = 1;
+    string accelerateLine = 2;
+    string monitorWebsocket = 3;
+    string classWebsocket = 4;
+    string httpServer = 5;
+    string janusServer = 6;
+}
+
+
+message ReqGetClassInfoById {
+    int64 id = 1;
+}
+
+message RepGetClassInfoById {
+    int64 Id = 1;
+    int64 GradeId =2;
+    string ClassName =3;
+    string LoginName =4;
+    string Password =5;
+    int64 SchoolId =6;
+    int64 Tauid =7;
+    string SchoolName =8;
+    string GradeName =9;
+    string Taname =10;
+    string AvatarClass =11;
+    int32 Press = 12;
+    bool Authentic = 13;
+
+}
+
+message ReqGetClassBySchoolD {
+    string SchoolName = 1;
+    int64 GradeId = 2;
+    int64 ClassId = 3;
+}
+
+message RepGetClassBySchoolD {
+    RequestRClassStruct    ClassSch = 1;
+}
+
+message ReqGetTextbooksVersion {
+}
+
+message TextbookVersion {
+    int64 Id  =1 ;
+    string version = 2;
+}
+
+message RepGetTextbooksVersion {
+    repeated TextbookVersion data = 1;
+}
+
+message ReqGetSchInfoByID {
+    int64 schID = 1;
+}
+
+message ReqGetRegionByTypeAndProvinceCity {
+    int64 typeCode = 1;
+    string province = 2;
+    string city = 3;
+}
+
+message RepGetRegionByTypeAndProvinceCity {
+    repeated string regions = 1;
+}
+
+message ReqGetSchoolProvince {
+    int64 typeCode = 1;
+}
+
+message RepGetSchoolProvince {
+    repeated string provinces = 1;
+}
+
+message ReqGetCityByProvince {
+    int64 typeCode = 1;
+    string province = 2;
+}
+
+message RepGetCityByProvince {
+    repeated string citys = 1;
+}
+
+//请求获取列表入参
+message RequestGetStus {
+    int64 pageSize = 1;
+    int64 currentPage = 2;
+    // 搜索条件
+    string loginName = 3;
+    string realName = 4;
+    int64 phone = 5;
+}
+message RequestGetTeas {
+    int64 pageSize = 1;
+    int64 currentPage = 2;
+    // 搜索条件
+}
+message RequestGetTeaassis {
+    int64 pageSize = 1;
+    int64 currentPage = 2;
+    // 搜索条件
+}
+message RequestGetSchs {
+    int64 pageSize = 1;
+    int64 currentPage = 2;
+    // 搜索条件
+    string searchName = 3;
+    //额外搜索条件
+    int64 ExtraFlag = 4;
+}
+message RequestGetClaes {
+    int64 pageSize = 1;
+    int64 currentPage = 2;
+    // 搜索条件
+}
+
+message RequestStudentScreen {
+    string studentName = 1;
+    int64 schID = 2;
+    int64 claID = 3;
+    int64 page = 4;
+    int64 pageSize = 5;
+}
+
+message RequestClassID {
+    int64 id = 1;
+}
+
+message ReplyGetStudents {
+    repeated RequestRStudentStruct studentsInfo = 1;
+    int64 count = 2;
+}
+
+message Request_MySchoolmate_app {
+    int64 id = 1;
+}
+
+message Request_studentinfo_app {
+    int64 id = 1;
+}
+
+message GetTeacherInfoByIdRequest {
+    int64 id = 1;
+}
+
+message Reply_MySchoolmate {
+    int64   id = 1;
+    string name = 2;
+    string avatar = 3;
+}
+
+message Reply_MySchoolmate_app {
+    repeated Reply_MySchoolmate myschoolmate = 1;
+} 
+
+message CascadeStuGRPCs {
+    repeated CascadeStuGRPC sls = 1;
+    int64 total = 2;
+}
+
+//gaidonghou
+message CascadeStuGRPC {
+	RequestRStudentStruct requestRStudentStruct =1 ;
+	RequestRTeachingAssistantStruct requestRTeachingAssistantStruct = 2;
+    RequestRSchoolStruct 	SchoolLogin = 3;
+	RequestRClassStruct     ClassCa = 4;
+}
+
+message RequestGetClassesStruct {
+    int64 schoolid = 1;
+    int64 classid = 2;
+}
+
+message ReplyGetClassesStruct{
+    string message = 1;
+    string code = 2;
+    repeated ClassIdName sls = 3;
+}
+
+message ClassIdName {
+    int64 classid = 1;
+    string class_name = 2;
+}
+
+message ReplyStudents {
+    string message = 1;
+    string code = 2;
+    repeated RequestRStudentStruct sls = 3;
+}
+
+message ReplyTeachers {
+    string message = 1;
+    string code = 2;
+    repeated RequestRTeacherStruct sls = 3;
+    int64 total = 4;
+}
+
+message ReplyTeachingAssistants {
+    string message = 1;
+    string code = 2;
+    repeated RequestRTeachingAssistantStruct  sls = 3;
+     int64 total = 4;
+}
+
+message ReplySchools {
+    string message = 1;
+    string code = 2;
+    repeated RequestRSchoolStruct  sls = 3;
+    int64 total = 4;
+}
+
+//注册message
+message RequestRStudentStruct {
+    string number = 1;  //学号
+    string password = 2;//密码
+    string realName = 3;
+    int32 age = 4;
+    string avatar = 5;
+    int64 classId = 6;
+    string className = 7;
+    int64 id = 8;
+    int64 phone = 9;
+    string loginName = 10;
+    string gradeName = 11;
+    string flag = 12;// 标识是app或者其他
+    int64 reset_passwd = 13;
+    int64 activate = 14;
+    string schoolName = 16;
+    int64 headTeacherId = 17;
+    string headTeacherName = 18;
+    string avatarClass = 19;
+    int64 press = 20;
+    string english_name = 21;
+    int64 source = 22;
+    int64 textbook_version = 23;
+    int64 gradeId = 24;
+    int64 gender = 25;
+    repeated GradeStruct gradesObj = 26;
+    int64 SchoolId = 27;
+    string TextbookName = 28;
+    int64 CreateTime = 29;
+}
+
+message GradeStruct {
+	int64 gradeId = 1;
+	string gradeName = 2;
+}
+message RequestRTeacherStruct {
+    int64 id = 1;
+    string loginName = 2;
+    string password = 3;
+    string realName = 4;
+    int32 age = 5;
+    string avatar = 6;
+    string school = 7;
+    int64 phone = 8;
+    string nickName = 9;
+    int64 gender = 10;
+    int64 status = 11;
+    string nationality = 12;
+    int64 starLevel = 13;
+    int64 teachLevel = 14;
+    int64 accelerateId = 15;
+    string accelerateLine = 16;
+    string monitorWebsocket = 17;
+    string classWebsocket = 18;
+    string httpServer = 19;
+    string janusServer = 20;
+}
+
+message RequestRSchoolStruct {
+    int64 id = 1;
+    string loginName = 2;
+    string password = 3;
+    string schoolname = 4;
+    int64 regionId = 5;
+    string region_name = 6;
+    string city = 7;
+    string province = 8;
+    repeated int64 grades = 9;
+    string sgrades = 10;
+    int64 phone = 11;
+    int64 type = 12;
+    map<string, string> GradesKV = 13;
+}
+
+
+
+//wechat responseSchool
+message ResponseSchoolByRegionType {
+    int64 id = 1;
+    string schoolname = 2;
+    string grades = 3;
+    repeated int64 gradesList = 4;
+    map<string, string> GradesKV = 5;
+}
+
+
+//wechat responseSchools
+message ResponseSchoolsByRegionType {
+    repeated ResponseSchoolByRegionType schools = 1; 
+}
+//wechat RequestRSchool
+message RequestSchoolWechat {
+    string province = 1;
+    string city = 2;
+    string region_name = 3;
+    string type = 4;
+}
+message RequestSchoolCMS {
+    string province = 1;
+    string city = 2;
+    string region_name = 3;
+}
+//wechat requestPhone
+message RequestPhone {
+    int64 phone = 1;
+}
+//wechat responseExistedByPhoneStu 
+message ResponseExistedByPhoneStu {
+    bool isExist = 1;
+    RequestRStudentStruct stu = 2;
+}
+message RequestRTeachingAssistantStruct {
+    int64 id = 1;
+    string loginName = 2;
+    string password = 3;
+    string realName = 4;
+    int32 age = 5;
+    string avatar = 6;
+    string school = 7;
+    int64 phone = 8;
+}
+
+message RequestRClassStruct {
+    int64 id = 1;
+    int64 GradeId = 2;
+    string ClassName = 3;
+    string LoginName = 4;
+    string Password = 5;
+    int64 SchoolId = 6;
+    int64 Tauid = 7;
+    int64 Schuid = 8;
+    string gradeName = 9;
+}
+
+message ReplyRStruct {
+    string message = 1;
+    string code = 2;//200 注册成功 401 注册失败（用户原因） 500 服务器内部错误
+    int64 id = 3;
+}
+// 认证请求
+message RequestAuthStruct {
+  string name = 1;//用户名
+  string passwd = 2;//登录密码
+  string flag = 3;//登录机构标识
+}
+
+// The response message containing the greetings
+message ReplyAuthStruct {
+  string message = 1;
+  string code = 2;//200 认证成功 401 认证失败 500 服务器内部错误
+  string token = 3;
+}
+//认证响应
+message ReplyAuthStudent {
+  string message = 1;
+  string code = 2;//200 认证成功 401 认证失败 500 服务器内部错误
+  string token = 3;
+  RequestRStudentStruct studentInfo = 4;
+}
+message ReplyAuthTeacher {
+  string message = 1;
+  string code = 2;//200 认证成功 401 认证失败 500 服务器内部错误
+  string token = 3;
+  RequestRTeacherStruct teacherInfo = 4;
+}
+message ReplyAuthTeachingAssistant {
+  string message = 1;
+  string code = 2;//200 认证成功 401 认证失败 500 服务器内部错误
+  string token = 3;
+  RequestRTeachingAssistantStruct teachingAssistantInfo = 4;
+}
+message ReplyAuthSchool {
+  string message = 1;
+  string code = 2;//200 认证成功 401 认证失败 500 服务器内部错误
+  string token = 3;
+  RequestRSchoolStruct schoolInfo = 4;
+}
+message ReqGetStudentByLoginName {
+    string loginName = 1;
+}
+
+message RequestUIDs {
+    repeated int64 uids = 1;
+}
+
+message RequestGetStudentIDsBySchoolGrade {
+    int64 school_id =1;
+    int64 grade_id=2;
+}
+
+message ReplyGetStudentIDsBySchoolGrade {
+    repeated int64 uids = 1;
+}
