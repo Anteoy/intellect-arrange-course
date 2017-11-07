@@ -152,8 +152,6 @@ public class HttpClientUtils {
             if (!(request instanceof HttpEntityEnclosingRequest)) {
                 return true;
             }
-
             return false;
         }}
-
 }

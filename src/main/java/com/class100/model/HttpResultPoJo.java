@@ -52,4 +52,13 @@ public class HttpResultPoJo {
     public void setData(String data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "HttpResultPoJo{" +
+                "statusCode=" + statusCode +
+                ", resmsg='" + resmsg + '\'' +
+                ", data='" + data + '\'' +
+                '}';
+    }
 }

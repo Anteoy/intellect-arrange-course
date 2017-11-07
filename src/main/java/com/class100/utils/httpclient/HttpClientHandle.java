@@ -54,6 +54,15 @@ public class HttpClientHandle {
                     LOGGER.info("monitorMsg{}", new StringBuffer("外部接口HTTP调用成功，状态码：").append(statusCode).append("，请求地址 url：").append(httpUriRequest.getURI()).toString(), "");
                 }
             } else {
+                entity = response.getEntity();
+                if (entity == null) {
+                    result.setResmsg(response.getStatusLine().getReasonPhrase());
+                    LOGGER.error("monitorMsg{}",  new StringBuffer("外部接口HTTP调用返回数据为null，请求地址 url：").append(httpUriRequest.getURI()).toString(), "");
+                } else {
+                    String content = EntityUtils.toString(entity, charset);
+                    result.setData(content);
+                    LOGGER.info("monitorMsg{}", new StringBuffer("外部接口HTTP调用成功，状态码：").append(statusCode).append("，请求地址 url：").append(httpUriRequest.getURI()).toString(), "");
+                }
                 String msg = response.getStatusLine().getReasonPhrase();
                 result.setResmsg(msg);
                 LOGGER.info("monitorMsg{}",  new StringBuffer("外部接口HTTP调用失败，状态码：").append(statusCode).append("，请求地址 url：").append(httpUriRequest.getURI()).toString(), msg);
