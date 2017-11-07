@@ -1,0 +1,43 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: intellect-arrange-course-excel-deploy
+  namespace: class100-app
+  labels:
+    app: intellect-arrange-course-excel-deploy
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: intellect-arrange-course-excel-pod
+    spec:
+      containers:
+        - image: registry.cn-shanghai.aliyuncs.com/online_biz/service-intellect-arrange-excel:v1.0.0-15
+          imagePullPolicy: Always
+          name: monitor
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+      imagePullSecrets:
+        - name: registry-class100-aliyun
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: intellect-arrange-course-excel-service
+  namespace: class100-app
+  labels:
+    app: intellect-arrange-course-excel-service
+spec:
+  ports:
+    - name: api-port
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  type: NodePort
+  selector:
+    app: intellect-arrange-course-excel-pod
